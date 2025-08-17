@@ -32,6 +32,7 @@ from django.contrib.auth import get_user_model
 #         return round(product.price * Decimal(1.1),2)
 
 class ProductImageSerializer(serializers.ModelSerializer):
+     image = serializers.ImageField()
      class Meta:
           model = ProductImage
           fields = ['id','image']
