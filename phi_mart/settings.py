@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-po!6#hgk-9q58q5b#n81az$97@b*(7gjz5_ob5cqt*sk*m#&kk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [".vercel.app", "127.0.0.1"]
+ALLOWED_HOSTS = [".vercel.app", "127.0.0.1", "localhost"]
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -57,8 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,7 +65,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
 
 ROOT_URLCONF = 'phi_mart.urls'
 
@@ -91,6 +92,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://phimart-delta.vercel.app",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 INTERNAL_IPS = [
     # ...
