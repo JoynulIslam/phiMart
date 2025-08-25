@@ -45,19 +45,19 @@ class ProductViewSet(ModelViewSet):
     operation_summary="Retrieve a list of product",
     manual_parameters=[
         openapi.Parameter(
-            "min_price",
+            "price__gt",
             openapi.IN_QUERY,
             description="Minimum price filter",
             type=openapi.TYPE_NUMBER,
         ),
         openapi.Parameter(
-            "max_price",
+            "price__lt",
             openapi.IN_QUERY,
             description="Maximum price filter",
             type=openapi.TYPE_NUMBER,
         ),
         openapi.Parameter(
-            "category",
+            "category_id",
             openapi.IN_QUERY,
             description="Category ID filter",
             type=openapi.TYPE_INTEGER,
