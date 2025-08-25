@@ -18,6 +18,8 @@ from rest_framework.permissions import DjangoModelPermissions , DjangoModelPermi
 from rest_framework.exceptions import PermissionDenied
 from product.permissions import IsReviewAuthorOrReadOnly
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+
 # Create your views here.
 
 class ProductViewSet(ModelViewSet):
@@ -39,6 +41,53 @@ class ProductViewSet(ModelViewSet):
     # def get_queryset(self):
     #     return Product.objects.prefetch_related('images').all()
 
+    @swagger_auto_schema(
+    operation_summary="Retrieve a list of product",
+    manual_parameters=[
+        openapi.Parameter(
+            "min_price",
+            openapi.IN_QUERY,
+            description="Minimum price filter",
+            type=openapi.TYPE_NUMBER,
+        ),
+        openapi.Parameter(
+            "max_price",
+            openapi.IN_QUERY,
+            description="Maximum price filter",
+            type=openapi.TYPE_NUMBER,
+        ),
+        openapi.Parameter(
+            "category",
+            openapi.IN_QUERY,
+            description="Category ID filter",
+            type=openapi.TYPE_INTEGER,
+        ),
+        openapi.Parameter(
+            "search",
+            openapi.IN_QUERY,
+            description="Search by name, description, or category name",
+            type=openapi.TYPE_STRING,
+        ),
+        openapi.Parameter(
+            "ordering",
+            openapi.IN_QUERY,
+            description="Order by price (use 'price' or '-price')",
+            type=openapi.TYPE_STRING,
+        ),
+    ]
+)
+
+
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+
     def destroy(self, request, *args, **kwargs):
         product = self.get_object()
         if product.stock > 10:
@@ -46,16 +95,6 @@ class ProductViewSet(ModelViewSet):
         self.perform_destroy(product)
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    @swagger_auto_schema(
-            operation_summary= " Retrive a list of product",
-            filter_class=ProductFilter 
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-    
-    
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
 class ProductImageViewSet(ModelViewSet):
     serializer_class = ProductImageSerializer
