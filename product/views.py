@@ -27,7 +27,7 @@ class ProductViewSet(ModelViewSet):
       - Allowed users to browes and filter product
       - Searching by name, description, category name
     """   
-
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend , SearchFilter , OrderingFilter]
     filterset_class = ProductFilter
@@ -36,8 +36,8 @@ class ProductViewSet(ModelViewSet):
     ordering_fields = ['price']
     permission_classes = [IsAdminOrReadOnly]
 
-    def get_queryset(self):
-        return Product.objects.prefetch_related('images').all()
+    # def get_queryset(self):
+    #     return Product.objects.prefetch_related('images').all()
 
     def destroy(self, request, *args, **kwargs):
         product = self.get_object()
