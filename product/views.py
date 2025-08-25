@@ -47,14 +47,13 @@ class ProductViewSet(ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     @swagger_auto_schema(
-            operation_summary= " Retrive a list of product"
+            operation_summary= " Retrive a list of product",
+            filter_class=ProductFilter 
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
     
-    @swagger_auto_schema(
-            operation_summary = "Create a product by admin"
-    )
+    
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
