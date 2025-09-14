@@ -17,8 +17,6 @@ class CartViewSet(CreateModelMixin ,DestroyModelMixin ,GenericViewSet,RetrieveMo
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        if Cart.objects.filter(user=self.request.user).exists():
-            raise ValidationError({"detail": "You already have a cart."})
         serializer.save(user=self.request.user)
 
     def get_queryset(self):
