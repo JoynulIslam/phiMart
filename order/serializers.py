@@ -46,11 +46,11 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = SimpleProductSerializer()
-    total_parice = serializers.SerializerMethodField(method_name='get_total_price')
+    total_price = serializers.SerializerMethodField(method_name='get_total_price')
     # product_price = serializers.SerializerMethodField(method_name='get_product_price')
     class Meta:
         model = CartItem
-        fields = ['id','product','quantity' , 'product' ,'total_parice']
+        fields = ['id','product','quantity' , 'product' ,'total_price']
     
     # def get_product_price(self , cart_item):
     #     return cart_item.product.price
