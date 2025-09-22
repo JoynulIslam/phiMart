@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from sslcommerz_lib import SSLCOMMERZ 
+from django.conf import settings as main_setting
+from django.shortcuts import redirect
 # Create your views here.
 
 
@@ -118,9 +120,9 @@ def initiate_payment(request):
     post_body['total_amount'] = amount
     post_body['currency'] = "BDT"
     post_body['tran_id'] = f"txn_{order_id}"
-    post_body['success_url'] = "http://localhost:5173/dashboard/payment/success/"
-    post_body['fail_url'] = "http://localhost:5173/dashboard/payment/fail/"
-    post_body['cancel_url'] = "http://localhost:5173/dashboard/orders/"
+    post_body['success_url'] = f"{main_setting.BACKEND_URL}/api/v1/payment/success/"
+    post_body['fail_url'] =  f"{main_setting.BACKEND_URL}/api/v1/payment/fail/"
+    post_body['cancel_url'] =  f"{main_setting.BACKEND_URL}/api/v1/payment/cancel/"
     post_body['emi_option'] = 0
     post_body['cus_name'] = f"{user.first_name} {user.last_name}"
     post_body['cus_email'] = user.email
@@ -144,5 +146,18 @@ def initiate_payment(request):
         return Response({"payment_url": response["GatewayPageURL"]})
     return Response({"error": "Payment initiation Failed"},status=status.HTTP_400_BAD_REQUEST)
     
-    
-    
+@api_view(['POST'])
+def payment_success(request):   
+    order_id = request.data.get("tran_id").split('_')[1]
+    order = Order.objects.get(id=order_id)
+    order.status("Ready To Ship")
+    order.save()
+    return redirect(f"{main_setting.FRONTEND_URL}/dashboard/orders/")
+
+@api_view(['POST'])
+def payment_cancel(request):
+    return redirect(f"{main_setting.FRONTEND_URL}/dashboard/orders/")
+
+@api_view(['POST'])
+def payment_fail(request):
+    return redirect(f"{main_setting.FRONTEND_URL}/dashboard/orders/")
