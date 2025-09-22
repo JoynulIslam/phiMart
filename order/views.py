@@ -148,10 +148,20 @@ def initiate_payment(request):
     
 @api_view(['POST'])
 def payment_success(request):   
-    order_id = request.data.get("tran_id").split('_')[1]
-    order = Order.objects.get(id=order_id)
-    order.status("Ready To Ship")
-    order.save()
+    tran_id = request.data.get("tran_id")
+    if not tran_id:
+        return Response({"error": "tran_id missing"}, status=400)
+
+    try:
+        order_id = tran_id.split('_')[1]
+        order = Order.objects.get(id=order_id)
+        order.status = "Ready To Ship"   
+        order.save()
+    except Order.DoesNotExist:
+        return Response({"error": "Order not found"}, status=404)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
     return redirect(f"{main_setting.FRONTEND_URL}/dashboard/orders/")
 
 @api_view(['POST'])
